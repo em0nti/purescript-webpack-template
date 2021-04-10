@@ -1,6 +1,6 @@
 {
-  "name": "Yomo",
-  "short_name": "yomo",
+  "name": "purescript-webpack-template",
+  "short_name": "purescript-webpack-template",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
