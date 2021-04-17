@@ -1,10 +1,12 @@
 const path = require("path");
-const { merge } = require("webpack-merge");
+const { mergeWithCustomize, customizeArray } = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const commonConfig = require("./webpack-common.config.js");
 
-module.exports = merge(commonConfig, {
+module.exports = mergeWithCustomize({
+  customizeArray: customizeArray({ "module.rules.*": "prepend" }),
+})(commonConfig, {
   mode: "production",
   devtool: "source-map",
   entry: "./src/index-bundle.js",

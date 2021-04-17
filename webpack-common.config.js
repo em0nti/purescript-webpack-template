@@ -23,4 +23,17 @@ module.exports = {
     }),
     // new WorkboxPlugin.GenerateSW({ clientsClaim: true, skipWaiting: true }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        include: __dirname + "/assets/styles",
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader", options: { importLoaders: 1 } },
+          { loader: "postcss-loader" },
+        ],
+      },
+    ],
+  },
 };

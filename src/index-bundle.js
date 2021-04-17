@@ -11,4 +11,5 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+require("../assets/styles/styles.css");
 require("../dce-output/Main").main();
