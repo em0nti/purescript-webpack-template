@@ -2,6 +2,7 @@
 , dependencies =
   [ "console"
   , "effect"
+  , "halogen"
   , "maybe"
   , "prelude"
   , "psci-support"

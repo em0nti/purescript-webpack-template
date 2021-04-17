@@ -1,41 +1,47 @@
 module Main where
 
 import Prelude
-import Data.Maybe (Maybe(..))
 import Effect (Effect)
-import Effect.Console (log)
-import Web.DOM as DOM
-import Web.DOM.Document as Doc
-import Web.DOM.Element as Element
-import Web.DOM.Node as Node
-import Web.DOM.Text as Text
-import Web.HTML (window)
-import Web.HTML.HTMLDocument (body, toDocument)
-import Web.HTML.HTMLElement as HElement
-import Web.HTML.Window (document)
+import Halogen as H
+import Halogen.Aff as HA
+import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
+import Halogen.VDom.Driver (runUI)
 
 main :: Effect Unit
-main = do
-  p <- createParagraph "Purescript Web App Starter works!"
-  withBodyNode \bodyNode ->
-    Node.appendChild (Element.toNode p) bodyNode
+main =
+  HA.runHalogenAff do
+    body <- HA.awaitBody
+    runUI component unit body
 
-withBodyNode :: (DOM.Node -> Effect Unit) -> Effect Unit
-withBodyNode callback =
-  findBodyNode
-    >>= case _ of
-        Nothing -> log "Couldn't find Document.body"
-        Just bodyNode -> callback bodyNode
+data Action
+  = Increment
+  | Decrement
+
+type State
+  = Int
+
+component :: ∀ query input output m. H.Component query input output m
+component = H.mkComponent { initialState, render, eval }
   where
-  findBodyNode :: Effect (Maybe DOM.Node)
-  findBodyNode = 
-    window >>= document >>= body
-      <#> map (HElement.toElement >>> Element.toNode)
+  initialState :: input -> State
+  initialState _input = 0
 
-createParagraph :: String -> Effect DOM.Element
-createParagraph content = do
-  doc <- window >>= document <#> toDocument
-  node <- Doc.createElement "p" doc
-  text <- Doc.createTextNode content doc
-  Node.appendChild (Text.toNode text) (Element.toNode node)
-  pure node
+  render :: ∀ slots. State -> HH.HTML (H.ComponentSlot slots m Action) Action
+  render state =
+    HH.div_
+      [ HH.button [ HE.onClick \_ -> Decrement ] [ HH.text "-" ]
+      , HH.div_ [ HH.text $ show state ]
+      , HH.button [ HE.onClick \_ -> Increment ] [ HH.text "+" ]
+      ]
+
+  eval ::
+    ∀ a slots.
+    H.HalogenQ query Action input a ->
+    H.HalogenM State Action slots output m a
+  eval = H.mkEval $ H.defaultEval { handleAction = handleAction }
+    where
+    handleAction :: Action -> H.HalogenM State Action slots output m Unit
+    handleAction = case _ of
+      Increment -> H.modify_ (_ + 1)
+      Decrement -> H.modify_ (_ - 1)
