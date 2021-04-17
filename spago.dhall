@@ -1,6 +1,8 @@
 { name = "purescript-webpack-template"
 , dependencies =
-  [ "console"
+  [ "aff-bus"
+  , "codec-argonaut"
+  , "console"
   , "effect"
   , "halogen"
   , "maybe"

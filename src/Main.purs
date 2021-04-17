@@ -7,12 +7,13 @@ import Halogen.Aff as HA
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.VDom.Driver (runUI)
+import Component.Rainbow as Rainbow
 
 main :: Effect Unit
 main =
   HA.runHalogenAff do
     body <- HA.awaitBody
-    runUI component unit body
+    runUI Rainbow.component unit body
 
 data Action
   = Increment
@@ -45,3 +46,4 @@ component = H.mkComponent { initialState, render, eval }
     handleAction = case _ of
       Increment -> H.modify_ (_ + 1)
       Decrement -> H.modify_ (_ - 1)
+
