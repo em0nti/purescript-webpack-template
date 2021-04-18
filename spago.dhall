@@ -1,15 +1,16 @@
 { name = "purescript-webpack-template"
 , dependencies =
-  [ "aff-bus"
+  [ "arrays"
   , "codec-argonaut"
   , "console"
   , "effect"
   , "halogen"
   , "maybe"
   , "prelude"
+  , "profunctor"
   , "psci-support"
-  , "web-dom"
-  , "web-html"
+  , "strings"
+  , "tuples"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
